@@ -12,11 +12,11 @@
         android:theme="@style/LoginTheme"
         android:screenOrientation="portrait">
         <activity android:name=".girisEkraniActivity">
-            <intent-filter>
+            <intent-filtger>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filtger>
         </activity>
         <activity android:name=".kayitEkraniActivity"
             android:label="@string/label_register_activity"/>
