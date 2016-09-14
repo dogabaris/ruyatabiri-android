@@ -17,14 +17,14 @@ import retrofit.client.Response;
 /**
  * Created by shadyfade on 13.09.2016.
  */
-public class kayitEkraniActivity extends AppCompatActivity {
+public class registerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_kayit_ekrani);
+        setContentView(R.layout.activity_register);
         getSupportActionBar().hide();
 
         Button btnSubmit = (Button) findViewById(R.id.btnRegister);
@@ -39,34 +39,34 @@ public class kayitEkraniActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            final EditText etEmail = (EditText) findViewById(R.id.etEmail);
-            final EditText etPassword = (EditText) findViewById(R.id.etPassword);
+            final EditText etEmail = (EditText) findViewById(R.id.etEmailRegister);
+            final EditText etPassword = (EditText) findViewById(R.id.etPasswordRegister);
 
-            final User user = new User();
+            final pojoUser user = new pojoUser();
             user.setEmail(etEmail.getText().toString());
             user.setPassword(etPassword.getText().toString());
 
             if (etEmail.getText().toString().matches("") || etPassword.getText().toString().matches("")) {
 
-                Toast.makeText(kayitEkraniActivity.this, "Alanlar Boş Bırakılamaz!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(registerActivity.this, "Alanlar Boş Bırakılamaz!", Toast.LENGTH_SHORT).show();
 
             }else if(Global.isValidEmail(etEmail.getText().toString())) {
 
-                Global.getService().Register(user, new Callback<PojoRegister>() {
+                Global.getService().Register(user, new Callback<pojoRegister>() {
                     @Override
-                    public void success(PojoRegister beanRegister, Response response) {
-                        Intent intent = new Intent(getBaseContext(), girisEkraniActivity.class);
+                    public void success(pojoRegister beanRegister, Response response) {
+                        Intent intent = new Intent(getBaseContext(), loginActivity.class);
                         startActivity(intent);
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(kayitEkraniActivity.this, "Kayıt olunamadı. Tekrar deneyin!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(registerActivity.this, "Kayıt olunamadı. Tekrar deneyin!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
             }else{
-                Toast.makeText(kayitEkraniActivity.this, "Mail düzgün girilmedi!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(registerActivity.this, "Mail düzgün girilmedi!", Toast.LENGTH_SHORT).show();
             }
         }
     };

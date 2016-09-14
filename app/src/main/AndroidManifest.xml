@@ -11,18 +11,38 @@
         android:supportsRtl="true"
         android:theme="@style/LoginTheme"
         android:screenOrientation="portrait">
-        <activity android:name=".girisEkraniActivity">
-            <intent-filtger>
+        <activity
+            android:name=".loginActivity">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filtger>
+            </intent-filter>
         </activity>
-        <activity android:name=".kayitEkraniActivity"
-            android:label="@string/label_register_activity"/>
+        <activity
+            android:name=".registerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.OtherActivity" />
 
-        <activity android:name=".sifreRestoreActivity"
-            android:label="@string/label_restore_activity"/>
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".restoreActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.OtherActivity" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".timelineActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.OtherActivity" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
 
     </application>
 
