@@ -1,12 +1,14 @@
 package com.bigapps.ruyatabirleri;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +18,11 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class loginActivity extends AppCompatActivity {
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private EditText etEmail,etPassword;
+    private Boolean saveLogin;
+    private CheckBox rememberCb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +35,33 @@ public class loginActivity extends AppCompatActivity {
 
         TextView regTv = (TextView) findViewById(R.id.tvRegister);
         TextView restoreTv = (TextView) findViewById(R.id.tvRestore);
+        etEmail = (EditText) findViewById(R.id.etEmailLogin);
+        etPassword = (EditText) findViewById(R.id.etPasswordLogin);
+        rememberCb = (CheckBox) findViewById(R.id.checkboxRemember);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        saveLogin = loginPreferences.getBoolean("saveLogin",false);
+
 
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         if (btnLogin != null) {
             btnLogin.setOnClickListener(Login);
         }
+
+        if (saveLogin)
+        {
+            rememberCb.setChecked(true);
+            etEmail.setText (loginPreferences.getString("email", ""));
+            etPassword.setText (loginPreferences.getString("password", ""));
+        }else{
+            rememberCb.setChecked(false);
+            SharedPreferences.Editor loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.putString("email", "");
+            loginPrefsEditor.putString("password", "");
+            loginPrefsEditor.apply();
+        }
+
+
 
         regTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,8 +84,8 @@ public class loginActivity extends AppCompatActivity {
     View.OnClickListener Login = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            final EditText etEmail = (EditText) findViewById(R.id.etEmailLogin);
-            final EditText etPassword = (EditText) findViewById(R.id.etPasswordLogin);
+            etEmail = (EditText) findViewById(R.id.etEmailLogin);
+            etPassword = (EditText) findViewById(R.id.etPasswordLogin);
 
             final pojoUser user = new pojoUser();
             user.setEmail(etEmail.getText().toString());
@@ -72,13 +101,25 @@ public class loginActivity extends AppCompatActivity {
 
                     @Override
                     public void success(pojoLogin pojoLogin, Response response) {
+                        if(rememberCb.isChecked()){
+                            loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+                            loginPrefsEditor.putBoolean("saveLogin", true);
+                            loginPrefsEditor.putString("email", etEmail.getText().toString());
+                            loginPrefsEditor.putString("password", etPassword.getText().toString());
+                            loginPrefsEditor.apply();
+                        }else{
+                            loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+                            loginPrefsEditor.putBoolean("saveLogin", false);
+                            loginPrefsEditor.apply();
+                        }
+                        finish();
                         Intent intent = new Intent(getBaseContext(), timelineActivity.class);
                         startActivity(intent);
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(loginActivity.this, "Kayıt olunamadı. Tekrar deneyin!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(loginActivity.this, "Giriş yapılamadı tekrar deneyin!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
