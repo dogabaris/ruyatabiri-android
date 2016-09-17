@@ -2,6 +2,7 @@ package com.bigapps.ruyatabirleri;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -23,6 +25,7 @@ public class loginActivity extends AppCompatActivity {
     private EditText etEmail,etPassword;
     private Boolean saveLogin;
     private CheckBox rememberCb;
+    private SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +52,15 @@ public class loginActivity extends AppCompatActivity {
 
         if (saveLogin)
         {
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Loading...");
+            pDialog.setCancelable(false);
+            pDialog.show();
             rememberCb.setChecked(true);
             etEmail.setText (loginPreferences.getString("email", ""));
             etPassword.setText (loginPreferences.getString("password", ""));
+            loginWithCredentials();
         }else{
             rememberCb.setChecked(false);
             SharedPreferences.Editor loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
@@ -81,60 +90,70 @@ public class loginActivity extends AppCompatActivity {
 
     }
 
+    public void loginWithCredentials(){
+        etEmail = (EditText) findViewById(R.id.etEmailLogin);
+        etPassword = (EditText) findViewById(R.id.etPasswordLogin);
+
+        final pojoUser user = new pojoUser();
+        user.setEmail(etEmail.getText().toString());
+        user.setPassword(etPassword.getText().toString());
+
+        if (etEmail.getText().toString().matches("") || etPassword.getText().toString().matches("")) {
+
+            Toast.makeText(loginActivity.this, "Alanlar Boş Bırakılamaz!", Toast.LENGTH_SHORT).show();
+
+        }else if(Global.isValidEmail(etEmail.getText().toString())) {
+
+            Global.getService().Login(user, new Callback<pojoLogin>() {
+
+                @Override
+                public void success(pojoLogin pojoLogin, Response response) {
+                    if(rememberCb.isChecked()){
+                        loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+                        loginPrefsEditor.putBoolean("saveLogin", true);
+                        loginPrefsEditor.putString("email", etEmail.getText().toString());
+                        loginPrefsEditor.putString("password", etPassword.getText().toString());
+                        loginPrefsEditor.apply();
+                    }else{
+                        rememberCb.setChecked(false);
+                        loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+                        loginPrefsEditor.putBoolean("saveLogin", false);
+                        loginPrefsEditor.apply();
+                    }
+                    loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+                    loginPrefsEditor.putBoolean("saveLogin", false);
+                    loginPrefsEditor.apply();
+                    finish();
+                    Intent intent = new Intent(getBaseContext(), timelineActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    if (error.getResponse() != null) {
+                        RestError body = (RestError) error.getBodyAs(RestError.class);
+                        switch (error.getResponse().getStatus()) {
+                            case 400://yanlış girilen bilgiler
+                                Toast.makeText(loginActivity.this, body.errorDetails, Toast.LENGTH_SHORT).show();
+                            case 404://kayıtlı olmayan kullanıcı
+                                Toast.makeText(loginActivity.this,  "Böyle bir kayıtlı kullanıcı yok!", Toast.LENGTH_SHORT).show();
+                        }
+                        loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
+                        loginPrefsEditor.putBoolean("saveLogin", false);
+                        loginPrefsEditor.apply();
+                    }
+                }
+            });
+
+        }else{
+            Toast.makeText(loginActivity.this, "Mail düzgün girilmedi!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     View.OnClickListener Login = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            etEmail = (EditText) findViewById(R.id.etEmailLogin);
-            etPassword = (EditText) findViewById(R.id.etPasswordLogin);
-
-            final pojoUser user = new pojoUser();
-            user.setEmail(etEmail.getText().toString());
-            user.setPassword(etPassword.getText().toString());
-
-            if (etEmail.getText().toString().matches("") || etPassword.getText().toString().matches("")) {
-
-                Toast.makeText(loginActivity.this, "Alanlar Boş Bırakılamaz!", Toast.LENGTH_SHORT).show();
-
-            }else if(Global.isValidEmail(etEmail.getText().toString())) {
-
-                Global.getService().Login(user, new Callback<pojoLogin>() {
-
-                    @Override
-                    public void success(pojoLogin pojoLogin, Response response) {
-                        if(rememberCb.isChecked()){
-                            loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
-                            loginPrefsEditor.putBoolean("saveLogin", true);
-                            loginPrefsEditor.putString("email", etEmail.getText().toString());
-                            loginPrefsEditor.putString("password", etPassword.getText().toString());
-                            loginPrefsEditor.apply();
-                        }else{
-                            loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
-                            loginPrefsEditor.putBoolean("saveLogin", false);
-                            loginPrefsEditor.apply();
-                        }
-                        finish();
-                        Intent intent = new Intent(getBaseContext(), timelineActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        if (error.getResponse() != null) {
-                            RestError body = (RestError) error.getBodyAs(RestError.class);
-                            switch (error.getResponse().getStatus()) {
-                                case 400://yanlış girilen bilgiler
-                                    Toast.makeText(loginActivity.this, body.errorDetails, Toast.LENGTH_SHORT).show();
-                                case 404://kayıtlı olmayan kullanıcı
-                                    Toast.makeText(loginActivity.this,  "Böyle bir kayıtlı kullanıcı yok!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                    }
-                });
-
-            }else{
-                Toast.makeText(loginActivity.this, "Mail düzgün girilmedi!", Toast.LENGTH_SHORT).show();
-            }
+            loginWithCredentials();
         }
     };
 }

@@ -64,7 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/checkbox_remember"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:checked="false" />
 
         <Button
             android:id="@+id/btnLogin"
