@@ -61,7 +61,15 @@ public class registerActivity extends AppCompatActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(registerActivity.this, "Kayıt olunamadı. Tekrar deneyin!", Toast.LENGTH_SHORT).show();
+                        if (error.getResponse() != null) {
+                            RestError body = (RestError) error.getBodyAs(RestError.class);
+                            switch (error.getResponse().getStatus()) {
+                                case 400://yanlış girilen bilgiler
+                                    Toast.makeText(registerActivity.this, body.errorDetails, Toast.LENGTH_SHORT).show();
+                                case 404://kayıtlı olmayan kullanıcı
+                                    Toast.makeText(registerActivity.this,  "Böyle bir kayıtlı kullanıcı yok!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                 });
 

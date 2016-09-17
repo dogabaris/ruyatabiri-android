@@ -57,14 +57,12 @@ public class loginActivity extends AppCompatActivity {
             pDialog.setTitleText("Loading...");
             pDialog.setCancelable(false);
             pDialog.show();
-            rememberCb.setChecked(true);
             etEmail.setText (loginPreferences.getString("email", ""));
             etPassword.setText (loginPreferences.getString("password", ""));
             loginWithCredentials();
         }else{
-            rememberCb.setChecked(false);
             SharedPreferences.Editor loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
-            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.putBoolean("saveLogin", false);
             loginPrefsEditor.putString("email", "");
             loginPrefsEditor.putString("password", "");
             loginPrefsEditor.apply();
@@ -115,14 +113,10 @@ public class loginActivity extends AppCompatActivity {
                         loginPrefsEditor.putString("password", etPassword.getText().toString());
                         loginPrefsEditor.apply();
                     }else{
-                        rememberCb.setChecked(false);
                         loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
                         loginPrefsEditor.putBoolean("saveLogin", false);
                         loginPrefsEditor.apply();
                     }
-                    loginPrefsEditor= getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
-                    loginPrefsEditor.putBoolean("saveLogin", false);
-                    loginPrefsEditor.apply();
                     finish();
                     Intent intent = new Intent(getBaseContext(), timelineActivity.class);
                     startActivity(intent);
