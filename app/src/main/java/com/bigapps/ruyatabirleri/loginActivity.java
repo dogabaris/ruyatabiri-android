@@ -119,7 +119,16 @@ public class loginActivity extends AppCompatActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(loginActivity.this, "Giriş yapılamadı tekrar deneyin!", Toast.LENGTH_SHORT).show();
+                        if (error.getResponse() != null) {
+                            RestError body = (RestError) error.getBodyAs(RestError.class);
+                            switch (error.getResponse().getStatus()) {
+                                case 400://yanlış girilen bilgiler
+                                    Toast.makeText(loginActivity.this, body.errorDetails, Toast.LENGTH_SHORT).show();
+                                case 404://kayıtlı olmayan kullanıcı
+                                    Toast.makeText(loginActivity.this,  "Böyle bir kayıtlı kullanıcı yok!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
                     }
                 });
 
