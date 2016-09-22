@@ -1,6 +1,7 @@
 package com.bigapps.ruyatabirleri;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,10 @@ import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * Created by shadyfade on 22.09.2016.
  */
@@ -24,12 +29,19 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private List<pojoDream> dreamList = new ArrayList<>();
     private View view;
     private boolean rock = true;
-    private String[] dreams;
+    private int pageid=0;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.hottest_fragment, container, false);
+
+        getHottestDreams();
 
         mRecyclerView = (SuperRecyclerView) view.findViewById(R.id.hottestlist);
 
@@ -46,13 +58,24 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
         return view;
     }
 
+    public void getHottestDreams(){
+        Global.getService().getHottestDreams(pageid,new Callback<List<pojoDream>>() {
+            @Override
+            public void success(List<pojoDream> pojoDreams, Response response) {
+                dreamList.addAll(pojoDreams);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(view.getContext(), "Rüyalar çekilirken sorun çıktı!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     @Override
     public void onRefresh() {
         Toast.makeText(view.getContext(), "Refresh", Toast.LENGTH_LONG).show();
-        dreamList.clear();
-        dreamList.addAll(dreamList);
-        rock = !rock;
+        getHottestDreams();
     }
 
 }

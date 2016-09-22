@@ -41,7 +41,8 @@
         <activity
             android:name=".timelineActivity"
             android:alwaysRetainTaskState="true"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.OtherActivity" />
 

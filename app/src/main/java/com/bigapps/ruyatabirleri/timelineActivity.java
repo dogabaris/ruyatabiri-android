@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * Created by shadyfade on 14.09.2016.
  */
-public class timelineActivity extends AppCompatActivity{
+public class timelineActivity extends AppCompatActivity {
     //This is our tablayout
     private TabLayout tabLayout;
     //This is our viewPager
@@ -81,4 +83,25 @@ public class timelineActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.toolbarSendDream) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -27,4 +27,6 @@
     <string name="error_pass">Enter a password</string>
     <string name="restore_email_sent">Please check your email for an account restoration link.</string>
     <string name="restore_email_fail">Restore email was not sent</string>
+    <string name="send_dream">Send Dream</string>
+    <string name="timeline_toolbar">toolbar</string>
 </resources>

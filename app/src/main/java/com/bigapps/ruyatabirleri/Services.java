@@ -1,10 +1,12 @@
 package com.bigapps.ruyatabirleri;
 
+import java.util.List;
+
+import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
-import retrofit.Callback;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
@@ -23,7 +25,7 @@ public interface Services {
         void createDream(@Body pojoCreateDream createDream, Callback<pojoDream> cb);
 
     @GET("/dream/all/{pageid}")
-        void getHottestDreams(@Path("pageid") int pageid);
+        void getHottestDreams(@Path("pageid") int pageid, Callback<List<pojoDream>> callback);
 
     @GET("{user_id}")//get user by id
     void GetUser();

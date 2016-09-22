@@ -111,6 +111,7 @@ public class loginActivity extends AppCompatActivity {
                         loginPrefsEditor.putBoolean("saveLogin", false);
                         loginPrefsEditor.apply();
                     }
+                    ActiveUser.tokenid=pojoLogin.getCode();
                     finish();
                     Intent intent = new Intent(getBaseContext(), timelineActivity.class);
                     startActivity(intent);

@@ -36,4 +36,5 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.malinskiy:superrecyclerview:1.1.4'
+    compile 'com.google.code.gson:gson:2.7'
 }
