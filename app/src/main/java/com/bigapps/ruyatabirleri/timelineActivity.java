@@ -3,10 +3,16 @@ package com.bigapps.ruyatabirleri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by shadyfade on 14.09.2016.
@@ -16,6 +22,7 @@ public class timelineActivity extends AppCompatActivity{
     private TabLayout tabLayout;
     //This is our viewPager
     private ViewPager viewPager;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,45 +31,54 @@ public class timelineActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_timeline);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Initializing the tablayout
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        //Adding the tabs using addTab() method
-        tabLayout.addTab(tabLayout.newTab().setText("Hottest"));
-        tabLayout.addTab(tabLayout.newTab().setText("Popular"));
-        tabLayout.addTab(tabLayout.newTab().setText("Me"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        //Initializing viewPager
         viewPager = (ViewPager) findViewById(R.id.pager);
+        setupViewPager(viewPager);
 
-        //Creating our pager adapter
-        Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
 
-        //Adding adapter to pager
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new hottestFragment(), getResources().getString(R.string.hottesttab));
+        adapter.addFragment(new popularFragment(), getResources().getString(R.string.populartab));
+        adapter.addFragment(new meFragment(), getResources().getString(R.string.metab));
         viewPager.setAdapter(adapter);
+    }
 
-        //Adding onTabSelectedListener to swipe views
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
 
-            }
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
 
-            }
-        });
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
 }

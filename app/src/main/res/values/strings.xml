@@ -14,6 +14,9 @@
     <string name="label_register_activity">Registration</string>
     <string name="label_restore_activity">Restore Password</string>
 
+    <string name="hottesttab">Hottest</string>
+    <string name="populartab">Popular</string>
+    <string name="metab">Me</string>
     <string name="fb_login_success">Login with Facebook successful!</string>
     <string name="login_fail">Login failed</string>
     <string name="google_login_success">Login with Google successful!</string>

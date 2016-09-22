@@ -19,4 +19,6 @@ public class hottestFragment extends Fragment {
         //Change R.layout.tab1 in you classes
         return inflater.inflate(R.layout.hottest_fragment, container, false);
     }
+
+
 }
