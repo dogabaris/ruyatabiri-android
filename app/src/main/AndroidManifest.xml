@@ -39,7 +39,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".timelineActivity">
+            android:name=".timelineActivity"
+            android:alwaysRetainTaskState="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.OtherActivity" />
 
