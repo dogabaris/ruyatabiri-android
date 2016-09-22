@@ -6,6 +6,7 @@ import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.Callback;
 import retrofit.http.PUT;
+import retrofit.http.Path;
 
 /**
  * Created by shadyfade on 14.09.2016.
@@ -18,8 +19,14 @@ public interface Services {
     @POST("/user/login")
         void Login(@Body pojoUser user, Callback<pojoLogin> cb);
 
+    @POST("/dream/")
+        void createDream(@Body pojoCreateDream createDream, Callback<pojoDream> cb);
+
+    @GET("/dream/all/{pageid}")
+        void getHottestDreams(@Path("pageid") int pageid);
+
     @GET("{user_id}")//get user by id
-        void GetUser();
+    void GetUser();
 
     @PUT("/")//update user
         void UpdateUser();

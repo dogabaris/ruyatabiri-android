@@ -4,12 +4,21 @@ package com.bigapps.ruyatabirleri;
  * Created by shadyfade on 14.09.2016.
  */
 public class pojoRegister {
+    private String userId;
     private String email;
     private String password;
     private String role;
     private String createDate;
     private String lastUpdateDate;
     private Integer deleted;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getEmail() {
         return email;

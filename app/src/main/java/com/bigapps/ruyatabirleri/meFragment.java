@@ -14,8 +14,8 @@ public class meFragment extends Fragment {
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.me_fragment, container, false);
 
-        //Returning the layout file after inflating
-        return inflater.inflate(R.layout.me_fragment, container, false);
+        return view;
     }
 }

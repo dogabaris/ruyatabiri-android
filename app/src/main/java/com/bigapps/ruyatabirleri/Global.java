@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Date;
 
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -24,6 +25,12 @@ public class Global {
                     .registerTypeAdapter(Date.class, new UnixTimeConverter());
 
             RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setRequestInterceptor(new RequestInterceptor() {
+                        @Override
+                        public void intercept(RequestFacade request) {
+                            request.addHeader("Authorization",ActiveUser.tokenid);
+                        }
+                    })
                     .setEndpoint("http://139.59.148.12:8181/api")
                     .setConverter(new GsonConverter(gsonBuilder.create()))
                     .build();
