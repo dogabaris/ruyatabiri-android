@@ -49,6 +49,28 @@ public class DreamsAdapter extends RecyclerView.Adapter<DreamsAdapter.MyViewHold
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    public void add(List<pojoDream> dream) {
+        insert(dream, dreamList.size());
+    }
+
+    public void insert(List<pojoDream> dream, int position) {
+        dreamList.addAll(position, dream);
+
+        notifyItemInserted(position);
+    }
+
+    public void remove(int position) {
+        dreamList.remove(position);
+
+        notifyItemRemoved(position);
+    }
+
+
+    @Override
     public int getItemCount() {
         return dreamList.size();
     }

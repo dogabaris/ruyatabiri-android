@@ -37,7 +37,6 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
@@ -56,14 +55,6 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         mRecyclerView.setRefreshListener(this);
 
-        /*swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.hottestSwipe);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(android.R.color.holo_green_dark,
-                android.R.color.holo_red_dark,
-                android.R.color.holo_blue_dark,
-                android.R.color.holo_orange_dark);
-        //mRecyclerView.addItemDecoration(top);*/
-
         return view;
     }
 
@@ -71,6 +62,7 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Global.getService().getHottestDreams(pageid,new Callback<List<pojoDream>>() {
             @Override
             public void success(List<pojoDream> pojoDreams, Response response) {
+                dreamList.clear();
                 mAdapter.insert(pojoDreams,0);
             }
 
@@ -80,8 +72,6 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         });
     }
-
-
 
     @Override
     public void onRefresh() {

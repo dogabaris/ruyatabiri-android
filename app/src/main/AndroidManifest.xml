@@ -50,6 +50,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".sendDreamActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.OtherActivity" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

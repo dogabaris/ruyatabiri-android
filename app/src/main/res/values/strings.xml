@@ -4,8 +4,10 @@
     <string name="btn_register">Register</string>
     <string name="hint_et_email">Email</string>
     <string name="hint_et_pass">Password</string>
+    <string name="hint_et_dream">Dream</string>
     <string name="checkbox_remember">Remember me</string>
     <string name="btn_login">Sign In</string>
+    <string name="btn_send">Send</string>
     <string name="tv_restore">Forgot password?</string>
     <string name="btn_facebook">Facebook Login</string>
     <string name="btn_google">Google Login</string>

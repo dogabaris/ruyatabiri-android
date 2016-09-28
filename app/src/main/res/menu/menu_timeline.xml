@@ -4,11 +4,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".timelineActivity">
 
-    <item
-        android:id="@+id/toolbarSendDream"
-        android:orderInCategory="200"
-        android:title="@string/send_dream"
-        android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="ifRoom"
-        />
+
 </menu>

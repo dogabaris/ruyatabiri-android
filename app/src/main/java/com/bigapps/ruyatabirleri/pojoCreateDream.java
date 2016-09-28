@@ -5,7 +5,6 @@ package com.bigapps.ruyatabirleri;
  */
 public class pojoCreateDream {
     private String description;
-    private String reply;
 
     public String getDescription() {
         return description;
@@ -15,11 +14,4 @@ public class pojoCreateDream {
         this.description = description;
     }
 
-    public String getReply() {
-        return reply;
-    }
-
-    public void setReply(String reply) {
-        this.reply = reply;
-    }
 }
