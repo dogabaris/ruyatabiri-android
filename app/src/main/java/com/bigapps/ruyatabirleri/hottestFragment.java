@@ -64,6 +64,7 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void success(List<pojoDream> pojoDreams, Response response) {
                 dreamList.clear();
                 mAdapter.insert(pojoDreams,0);
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -76,7 +77,7 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onRefresh() {
         //Toast.makeText(view.getContext(), "Refresh", Toast.LENGTH_LONG).show();
-        dreamList.clear();
+        //dreamList.clear();
         getHottestDreams();
     }
 

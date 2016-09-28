@@ -59,7 +59,7 @@ public class DreamsAdapter extends RecyclerView.Adapter<DreamsAdapter.MyViewHold
 
     public void insert(List<pojoDream> dream, int position) {
         dreamList.addAll(position, dream);
-
+        //notifyItemRangeInserted(0, dream.size());
         notifyItemInserted(position);
     }
 
