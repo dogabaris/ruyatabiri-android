@@ -29,9 +29,7 @@ public class hottestFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private DreamsAdapter mAdapter;
     private List<pojoDream> dreamList = new ArrayList<>();
     private View view;
-    private boolean rock = true;
     private int pageid=0;
-    private SwipeRefreshLayout swipeLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

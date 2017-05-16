@@ -2,20 +2,76 @@ package com.bigapps.ruyatabirleri;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by shadyfade on 22.09.2016.
  */
-public class meFragment extends Fragment {
+public class meFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener , OnMoreListener {
+    private SuperRecyclerView mRecyclerView;
+    private DreamsAdapter mAdapter;
+    private List<pojoDream> dreamList = new ArrayList<>();
+    private View view;
+    private int pageid=0;
 
-    //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.me_fragment, container, false);
+        view = inflater.inflate(R.layout.me_fragment, container, false);
+
+        getMeDreams();
+
+        mRecyclerView = (SuperRecyclerView) view.findViewById(R.id.hottestlist);
+
+        mAdapter = new DreamsAdapter(dreamList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.setRefreshListener(this);
 
         return view;
+    }
+
+    public void getMeDreams(){
+        Global.getService().getHottestDreams(pageid,new Callback<List<pojoDream>>() {
+            @Override
+            public void success(List<pojoDream> pojoDreams, Response response) {
+                dreamList.clear();
+                mAdapter.insert(pojoDreams,0);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(view.getContext(), "Rüyalar çekilirken sorun çıktı!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        getMeDreams();
     }
 }

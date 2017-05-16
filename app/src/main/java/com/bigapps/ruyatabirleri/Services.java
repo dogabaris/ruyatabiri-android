@@ -26,6 +26,9 @@ public interface Services {
 
     @GET("/dream/all/{pageid}")
         void getHottestDreams(@Path("pageid") int pageid, Callback<List<pojoDream>> callback);
+    
+    @PUT("/dream/")
+        void updateDream();
 
     @GET("{user_id}")//get user by id
     void GetUser();
